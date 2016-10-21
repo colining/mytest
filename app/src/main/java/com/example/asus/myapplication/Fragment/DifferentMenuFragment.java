@@ -21,14 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.example.asus.myapplication.Activity;
+package com.example.asus.myapplication.Fragment;
 
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -41,26 +44,26 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.asus.myapplication.R;
 
-
 import java.util.List;
 
 /**
  * SwipeMenuListView
  * Created by baoyz on 15/6/29.
  */
-public class DifferentMenuActivity  extends Activity {
+public class DifferentMenuFragment extends Fragment {
 
     private List<ApplicationInfo> mAppList;
     private AppAdapter mAdapter;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_list,container,false);
 
-        mAppList = getPackageManager().getInstalledApplications(0);
 
-        SwipeMenuListView listView = (SwipeMenuListView) findViewById(R.id.listView);
+    mAppList = getActivity().getPackageManager().getInstalledApplications(0);
+
+        SwipeMenuListView listView = (SwipeMenuListView) view.findViewById(R.id.listView);
         mAdapter = new AppAdapter();
         listView.setAdapter(mAdapter);
 
@@ -86,52 +89,52 @@ public class DifferentMenuActivity  extends Activity {
 
             private void createMenu1(SwipeMenu menu) {
                 SwipeMenuItem item1 = new SwipeMenuItem(
-                        getApplicationContext());
+                        getActivity().getApplicationContext());
                 item1.setBackground(new ColorDrawable(Color.rgb(0xE5, 0x18,
                         0x5E)));
-                item1.setWidth(90);
-                item1.setIcon(R.drawable.ic_action_favorite);
+                item1.setWidth(dp2px(40));
+                item1.setIcon(R.drawable.delete);
                 menu.addMenuItem(item1);
                 SwipeMenuItem item2 = new SwipeMenuItem(
-                        getApplicationContext());
+                        getActivity().getApplicationContext());
                 item2.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
                         0xCE)));
-                item2.setWidth(90);
-                item2.setIcon(R.drawable.ic_action_good);
+                item2.setWidth(dp2px(40));
+                item2.setIcon(R.drawable.delete);
                 menu.addMenuItem(item2);
             }
 
             private void createMenu2(SwipeMenu menu) {
                 SwipeMenuItem item1 = new SwipeMenuItem(
-                        getApplicationContext());
+                        getActivity().getApplicationContext());
                 item1.setBackground(new ColorDrawable(Color.rgb(0xE5, 0xE0,
                         0x3F)));
-                item1.setWidth(dp2px(90));
-                item1.setIcon(R.drawable.ic_action_important);
+                item1.setWidth(dp2px(40));
+                item1.setIcon(R.drawable.delete);
                 menu.addMenuItem(item1);
                 SwipeMenuItem item2 = new SwipeMenuItem(
-                        getApplicationContext());
+                        getActivity().getApplicationContext());
                 item2.setBackground(new ColorDrawable(Color.rgb(0xF9,
                         0x3F, 0x25)));
-                item2.setWidth(dp2px(90));
-                item2.setIcon(R.drawable.ic_action_discard);
+                item2.setWidth(dp2px(40));
+                item2.setIcon(R.drawable.delete);
                 menu.addMenuItem(item2);
             }
 
             private void createMenu3(SwipeMenu menu) {
                 SwipeMenuItem item1 = new SwipeMenuItem(
-                        getApplicationContext());
+                        getActivity().getApplicationContext());
                 item1.setBackground(new ColorDrawable(Color.rgb(0x30, 0xB1,
                         0xF5)));
-                item1.setWidth(dp2px(90));
-                item1.setIcon(R.drawable.ic_action_about);
+                item1.setWidth(dp2px(40));
+                item1.setIcon(R.drawable.delete);
                 menu.addMenuItem(item1);
                 SwipeMenuItem item2 = new SwipeMenuItem(
-                        getApplicationContext());
+                        getActivity().getApplicationContext());
                 item2.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
                         0xCE)));
-                item2.setWidth(dp2px(90));
-                item2.setIcon(R.drawable.ic_action_share);
+                item2.setWidth(dp2px(40));
+                item2.setIcon(R.drawable.delete);
                 menu.addMenuItem(item2);
             }
         };
@@ -158,7 +161,7 @@ public class DifferentMenuActivity  extends Activity {
                 return false;
             }
         });
-
+        return  view;
     }
 
     class AppAdapter extends BaseAdapter {
@@ -193,31 +196,38 @@ public class DifferentMenuActivity  extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {                     //设定了列表项的view
             if (convertView == null) {
-                convertView = View.inflate(getApplicationContext(),
+                convertView = View.inflate(getActivity().getApplicationContext(),
                         R.layout.test_list, null);
                 new ViewHolder(convertView);
             }
             ViewHolder holder = (ViewHolder) convertView.getTag();
             ApplicationInfo item = getItem(position);
-            holder.mTextView.setText("2010,2,9");
+            holder.mTextView.setText("fututut");
             holder.mTextView2.setText("天气不错");
-//            holder.iv_icon.setImageDrawable(item.loadIcon(getPackageManager()));
-//            holder.tv_name.setText(item.loadLabel(getPackageManager()));
+//            holder.iv_icon.setImageDrawable(item.loadIcon(getActivity().getPackageManager()));
+//            holder.tv_name.setText(item.loadLabel(getActivity().getPackageManager()));
             return convertView;
         }
 
         class ViewHolder {                                                      //
 //            ImageView iv_icon;
 //            TextView tv_name;
-            TextView mTextView;
-            TextView mTextView2;
 //
-          public ViewHolder(View view) {
+//            public ViewHolder(View view) {
 //                iv_icon = (ImageView) view.findViewById(R.id.iv_icon);
 //                tv_name = (TextView) view.findViewById(R.id.tv_name);
 //                view.setTag(this);
-              mTextView = (TextView) view.findViewById(R.id.textView);
-              mTextView2 = (TextView) view.findViewById( R.id.textView2);
+//            }
+            TextView mTextView;
+            TextView mTextView2;
+            //
+            public ViewHolder(View view) {
+//                iv_icon = (ImageView) view.findViewById(R.id.iv_icon);
+//                tv_name = (TextView) view.findViewById(R.id.tv_name);
+//                view.setTag(this);
+                mTextView = (TextView) view.findViewById(R.id.textView);
+                mTextView2 = (TextView) view.findViewById( R.id.textView2);
+                view.setTag(this);
 
             }
         }
@@ -227,5 +237,4 @@ public class DifferentMenuActivity  extends Activity {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                 getResources().getDisplayMetrics());
     }
-
 }
