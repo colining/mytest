@@ -3,6 +3,7 @@ package com.example.asus.myapplication.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Window;
 
 import com.example.asus.myapplication.R;
 
@@ -15,7 +16,10 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+//        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,R.layout.title);
         setContentView(R.layout.activity_fragment);
+
         android.support.v4.app.FragmentManager fm=getSupportFragmentManager();
         Fragment fragment =fm.findFragmentById(R.id.fragmentContainer);
         if(fragment==null)
@@ -24,4 +28,5 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
             fm.beginTransaction().add(R.id.fragmentContainer,fragment).commit();
         }
     }
+
 }

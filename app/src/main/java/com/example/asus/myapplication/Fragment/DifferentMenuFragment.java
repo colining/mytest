@@ -30,13 +30,21 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -55,10 +63,63 @@ public class DifferentMenuFragment extends Fragment {
     private List<ApplicationInfo> mAppList;
     private AppAdapter mAdapter;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // TODO Auto-generated method stub
+        menu.clear();
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.test, menu);
+
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_list,container,false);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.include);
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.setSupportActionBar(toolbar);
+     activity.getSupportActionBar().setTitle("便签");
+      toolbar.setNavigationIcon(R.drawable.more);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+//        //toolbar.setNavigationIcon(R.drawable.more);//设置导航栏图标
+//        toolbar.setLogo(R.mipmap.ic_launcher);//设置app logo
+//        toolbar.setTitle("Title");//设置主标题
+//        toolbar.setSubtitle("Subtitle");//设置子标题
+//
+//        toolbar.inflateMenu(R.menu.test);//设置右上角的填充菜单
+//        activity.setSupportActionBar(toolbar);
+//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                int menuItemId = item.getItemId();
+//                if (menuItemId == R.id.action_item1) {
+//                    Toast.makeText(getActivity() ,"test" , Toast.LENGTH_SHORT).show();
+//
+//                } else
+//                    Toast.makeText(getActivity() , "lalal" , Toast.LENGTH_SHORT).show();
+//
+//                return true;
+//            }
+//        });
+
+
+        //for crate home button
 
 
     mAppList = getActivity().getPackageManager().getInstalledApplications(0);
@@ -66,6 +127,7 @@ public class DifferentMenuFragment extends Fragment {
         SwipeMenuListView listView = (SwipeMenuListView) view.findViewById(R.id.listView);
         mAdapter = new AppAdapter();
         listView.setAdapter(mAdapter);
+
 
         // step 1. create a MenuCreator
         SwipeMenuCreator creator = new SwipeMenuCreator() {

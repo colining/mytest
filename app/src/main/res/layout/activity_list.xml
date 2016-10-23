@@ -2,11 +2,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
 
+    >
+    <include layout="@layout/toolbar"
+
+             android:id="@+id/include"/>
     <com.baoyz.swipemenulistview.SwipeMenuListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/include"
+        android:divider="#F8F8FF"
+        android:background="#F8F8FF"
+
+        android:dividerHeight="4dp"/>
 
 </RelativeLayout>
