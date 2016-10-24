@@ -13,6 +13,6 @@ import java.util.UUID;
 public class testActivity  extends  SingleFragmentActivity{
     @Override
     protected Fragment createFragment(){
-        return  new DifferentMenuFragment();
+        return  new testFragment();
     }
 }

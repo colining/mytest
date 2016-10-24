@@ -7,19 +7,19 @@
         android:title="menu_search"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/action_notification"
-        android:icon="@drawable/ic_action_about"
-        android:title="menu_notifications"
-        app:showAsAction="ifRoom" />
+    <!--<item-->
+        <!--android:id="@+id/action_notification"-->
+        <!--android:icon="@drawable/ic_action_about"-->
+        <!--android:title="menu_notifications"-->
+        <!--app:showAsAction="ifRoom" />-->
 
-    <item
-        android:id="@+id/action_item1"
-        android:title="item_01"
-        app:showAsAction="never" />
+    <!--<item-->
+        <!--android:id="@+id/action_item1"-->
+        <!--android:title="item_01"-->
+        <!--app:showAsAction="never" />-->
 
-    <item
-        android:id="@+id/action_item2"
-        android:title="item_02"
-        app:showAsAction="never" />
+    <!--<item-->
+        <!--android:id="@+id/action_item2"-->
+        <!--android:title="item_02"-->
+        <!--app:showAsAction="never" />-->
 </menu>

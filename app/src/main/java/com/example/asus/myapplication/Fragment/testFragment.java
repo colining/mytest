@@ -1,11 +1,20 @@
 package com.example.asus.myapplication.Fragment;
 
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -20,68 +29,52 @@ import com.baoyz.swipemenulistview.*;
  */
 public class testFragment extends Fragment {
 
-     SwipeMenuListView mSwipeMenuListView;
+    private ActionBarDrawerToggle mDrawerToggle;
+    protected Toolbar toolbar;
+    protected DrawerLayout mDrawerLayout;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.activity_fragment,container);
-        mSwipeMenuListView = (SwipeMenuListView ) view.findViewById(R.id.listView);
-        mSwipeMenuListView.setMenuCreator(creator);
-        mSwipeMenuListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+        View view =inflater.inflate(R.layout.test,container,false);
+
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        toolbar= (Toolbar) view.findViewById(R.id.include);
+
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setTitle("便签");
+        toolbar.setNavigationIcon(R.drawable.more);
+        mDrawerLayout= (DrawerLayout) view.findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, toolbar, R.string.open, R.string.close) {
             @Override
-            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                switch (index) {
-                    case 0:
-                        // open
-                        break;
-                    case 1:
-                        // delete
-                        break;
-                }
-                // false : close the menu; true : not close the menu
-                return false;
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getActivity().invalidateOptionsMenu();
             }
-        });
-        mSwipeMenuListView.setSwipeDirection(SwipeMenuListView.DIRECTION_RIGHT);
-        mSwipeMenuListView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
-        return view;
+
+
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                getActivity().invalidateOptionsMenu();
+            }
+        };
+        mDrawerToggle.syncState();
+        mDrawerLayout.setDrawerListener(mDrawerToggle);//设置监听器
+        return  view;
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        super.onCreateOptionsMenu(menu, inflater);
+
 
     }
-    SwipeMenuCreator creator = new SwipeMenuCreator() {
-
-        @Override
-        public void create(SwipeMenu menu) {
-            // create "open" item
-            SwipeMenuItem openItem = new SwipeMenuItem(getActivity().getApplicationContext());
-            // set item background
-            openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
-                    0xCE)));
-            // set item width
-            openItem.setWidth(90);
-            // set item title
-            openItem.setTitle("Open");
-            // set item title fontsize
-            openItem.setTitleSize(18);
-            // set item title font color
-            openItem.setTitleColor(Color.WHITE);
-            // add to menu
-            menu.addMenuItem(openItem);
-
-            // create "delete" item
-            SwipeMenuItem deleteItem = new SwipeMenuItem(
-                    getActivity().getApplicationContext());
-            // set item background
-            deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
-                    0x3F, 0x25)));
-            // set item width
-            deleteItem.setWidth(90);
-            // set a icon
-            deleteItem.setIcon(R.drawable.delete);
-            // add to menu
-            menu.addMenuItem(deleteItem);
-        }
-    };
-
 
 }

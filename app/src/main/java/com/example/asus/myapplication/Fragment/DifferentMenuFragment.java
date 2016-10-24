@@ -25,11 +25,14 @@ package com.example.asus.myapplication.Fragment;
 
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -62,7 +65,10 @@ public class DifferentMenuFragment extends Fragment {
 
     private List<ApplicationInfo> mAppList;
     private AppAdapter mAdapter;
+    private  DrawerLayout drawerLayout;
+    private  Toolbar toolbar;
 
+    private ActionBarDrawerToggle mActionBarDrawerToggle;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -80,22 +86,26 @@ public class DifferentMenuFragment extends Fragment {
         inflater.inflate(R.menu.test, menu);
 
     }
+//    @Override
+//    protected void onPostCreate(Bundle savedInstanceState) {
+//        super.onPostCreate(savedInstanceState);
+//        mActionBarDrawerToggle.syncState();
+//    }
+
+
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_list,container,false);
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.include);
+      toolbar = (Toolbar) view.findViewById(R.id.include);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
      activity.getSupportActionBar().setTitle("便签");
-      toolbar.setNavigationIcon(R.drawable.more);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+      toolbar.setNavigationIcon(R.drawable.more);    //这边要留意的是setNavigationIcon需要放在 setSupportActionBar之后才会生效。
 
-            }
-        });
+
+
 
 //        //toolbar.setNavigationIcon(R.drawable.more);//设置导航栏图标
 //        toolbar.setLogo(R.mipmap.ic_launcher);//设置app logo
