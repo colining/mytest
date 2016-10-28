@@ -212,8 +212,8 @@ public class DifferentMenuFragment extends Fragment {
             private void createMenu1(SwipeMenu menu) {
                 SwipeMenuItem item1 = new SwipeMenuItem(
                         getActivity().getApplicationContext());
-//                item1.setBackground(new ColorDrawable(Color.rgb(0xE5, 0x18,
-//                        0x5E)));
+                item1.setBackground(new ColorDrawable(Color.rgb(224, 224,
+                        224)));
                 item1.setWidth(dp2px(40));
                 item1.setIcon(R.drawable.delete);
                 menu.addMenuItem(item1);
