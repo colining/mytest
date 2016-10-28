@@ -17,10 +17,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/include"
-            android:divider="#F8F8FF"
-            android:background="#F8F8FF"
+            android:divider="#2222c8"
+            android:background="#ffffff"
 
-            android:dividerHeight="4dp"/>
+            android:dividerHeight="50dp"/>
 
 
     </RelativeLayout>

@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="toolbarStyle">@style/ClubToolbar</item>
+
     </style>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat">
@@ -17,5 +18,16 @@
     <style name="ClubToolbar" parent="Widget.AppCompat.Toolbar">
         <item name="contentInsetStart">0dp</item><!-- 设置该属性解决空白部分-->
     </style>
+
+    <style name="Theme.DesignDemo" parent="Base.Theme.DesignDemo">
+    </style>
+
+    <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#673AB7</item>
+        <item name="colorPrimaryDark">#512DA8</item>
+        <item name="colorAccent">#FF4081</item>
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
+
 
 </resources>

@@ -30,6 +30,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -67,7 +68,8 @@ public class DifferentMenuFragment extends Fragment {
     private AppAdapter mAdapter;
     private  DrawerLayout drawerLayout;
     private  Toolbar toolbar;
-
+    protected DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,7 +104,55 @@ public class DifferentMenuFragment extends Fragment {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
      activity.getSupportActionBar().setTitle("便签");
-      toolbar.setNavigationIcon(R.drawable.more);    //这边要留意的是setNavigationIcon需要放在 setSupportActionBar之后才会生效。
+     // toolbar.setNavigationIcon(R.drawable.more);    //这边要留意的是setNavigationIcon需要放在 setSupportActionBar之后才会生效。
+        mDrawerLayout= (DrawerLayout) view.findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, toolbar, R.string.open, R.string.close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getActivity().invalidateOptionsMenu();
+            }
+
+
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                getActivity().invalidateOptionsMenu();
+            }
+        };
+
+
+        mDrawerToggle.syncState();
+        mDrawerLayout.setDrawerListener(mDrawerToggle);//设置监听器
+
+
+        //设置导航栏NavigationView的点击事件
+        NavigationView mNavigationView = (NavigationView) view.findViewById(R.id.navigation_view);
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                switch (menuItem.getItemId())
+                {
+                    case R.id.item_green:
+                        Toast.makeText(getActivity(),"lallalal",Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.item_blue:
+                        // getSupportFragmentManager().beginTransaction().replace(R.id.frame_content,new FragmentTwo()).commit();
+                        Toast.makeText(getActivity(),"lallalal",Toast.LENGTH_SHORT).show();
+                        toolbar.setTitle("我的留言");
+                        break;
+                    case R.id.item_pink:
+                        // getSupportFragmentManager().beginTransaction().replace(R.id.frame_content,new FragmentThree()).commit();
+                        Toast.makeText(getActivity(),"lallalal",Toast.LENGTH_SHORT).show();
+                        toolbar.setTitle("附近的人");
+                        break;
+                }
+                menuItem.setChecked(true);//点击了把它设为选中状态
+                mDrawerLayout.closeDrawers();//关闭抽屉
+                return true;
+            }
+        });
 
 
 
@@ -162,15 +212,15 @@ public class DifferentMenuFragment extends Fragment {
             private void createMenu1(SwipeMenu menu) {
                 SwipeMenuItem item1 = new SwipeMenuItem(
                         getActivity().getApplicationContext());
-                item1.setBackground(new ColorDrawable(Color.rgb(0xE5, 0x18,
-                        0x5E)));
+//                item1.setBackground(new ColorDrawable(Color.rgb(0xE5, 0x18,
+//                        0x5E)));
                 item1.setWidth(dp2px(40));
                 item1.setIcon(R.drawable.delete);
                 menu.addMenuItem(item1);
                 SwipeMenuItem item2 = new SwipeMenuItem(
                         getActivity().getApplicationContext());
-                item2.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
-                        0xCE)));
+//                item2.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
+//                        0xCE)));
                 item2.setWidth(dp2px(40));
                 item2.setIcon(R.drawable.delete);
                 menu.addMenuItem(item2);
@@ -198,6 +248,7 @@ public class DifferentMenuFragment extends Fragment {
                         getActivity().getApplicationContext());
                 item1.setBackground(new ColorDrawable(Color.rgb(0x30, 0xB1,
                         0xF5)));
+
                 item1.setWidth(dp2px(40));
                 item1.setIcon(R.drawable.delete);
                 menu.addMenuItem(item1);

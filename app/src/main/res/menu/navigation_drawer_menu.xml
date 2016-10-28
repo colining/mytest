@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android" android:background="@drawable/button_shape">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"  android:background="@drawable/button_shape">
         <item
+            android:background="@drawable/button_shape"
             android:id="@+id/item_green"
             android:icon="@drawable/ic_action_share"
-            android:title="Green" />
+            android:title="Green"
+            />
         <item
             android:id="@+id/item_blue"
             android:icon="@drawable/ic_action_important"

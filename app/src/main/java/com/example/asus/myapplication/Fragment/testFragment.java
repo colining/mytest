@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 
 import android.support.v4.widget.DrawerLayout;
@@ -15,9 +16,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -48,7 +51,7 @@ public class testFragment extends Fragment {
 
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setTitle("便签");
-        toolbar.setNavigationIcon(R.drawable.more);
+      //  toolbar.setNavigationIcon(R.drawable.more);
         mDrawerLayout= (DrawerLayout) view.findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, toolbar, R.string.open, R.string.close) {
             @Override
@@ -65,9 +68,40 @@ public class testFragment extends Fragment {
                 getActivity().invalidateOptionsMenu();
             }
         };
+
+
         mDrawerToggle.syncState();
-        mDrawerLayout.setDrawerListener(mDrawerToggle);//设置监听器
-        return  view;
+       mDrawerLayout.setDrawerListener(mDrawerToggle);//设置监听器
+
+
+        //设置导航栏NavigationView的点击事件
+        NavigationView mNavigationView = (NavigationView) view.findViewById(R.id.navigation_view);
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                switch (menuItem.getItemId())
+                {
+                    case R.id.item_green:
+                        Toast.makeText(getActivity(),"lallalal",Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.item_blue:
+                       // getSupportFragmentManager().beginTransaction().replace(R.id.frame_content,new FragmentTwo()).commit();
+                        Toast.makeText(getActivity(),"lallalal",Toast.LENGTH_SHORT).show();
+                        toolbar.setTitle("我的留言");
+                        break;
+                    case R.id.item_pink:
+                       // getSupportFragmentManager().beginTransaction().replace(R.id.frame_content,new FragmentThree()).commit();
+                        Toast.makeText(getActivity(),"lallalal",Toast.LENGTH_SHORT).show();
+                        toolbar.setTitle("附近的人");
+                        break;
+                }
+                menuItem.setChecked(true);//点击了把它设为选中状态
+                mDrawerLayout.closeDrawers();//关闭抽屉
+                return true;
+            }
+        });
+
+    return  view;
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
