@@ -24,6 +24,7 @@
 package com.example.asus.myapplication.Fragment;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -32,10 +33,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -46,6 +50,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,10 +76,14 @@ public class DifferentMenuFragment extends Fragment {
     protected DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
+    private  SwipeMenuListView listView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
+
         super.onCreate(savedInstanceState);
+
         setHasOptionsMenu(true);
     }
 
@@ -86,6 +95,39 @@ public class DifferentMenuFragment extends Fragment {
         menu.clear();
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.test, menu);
+        MenuItem searchitem = menu.findItem(R.id.ab_search);
+        MenuItem item = menu.findItem(R.id.ab_search);
+        SearchView searchView = new SearchView(getActivity());
+        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+        MenuItemCompat.setActionView(item, searchView);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                Log.d("lalallala",""+listView.getCount());
+                if (TextUtils.isEmpty((newText))){
+                    listView.clearTextFilter();
+                }else{
+
+                    listView.setFilterText(newText.toString());}
+                return false;
+            }
+
+        });
+        searchView.setOnClickListener(new View.OnClickListener() {
+                                          @Override
+                                          public void onClick(View v) {
+
+                                          }
+                                      }
+        );
+
+
 
     }
 //    @Override
@@ -102,7 +144,9 @@ public class DifferentMenuFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_list,container,false);
       toolbar = (Toolbar) view.findViewById(R.id.include);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
+
         activity.setSupportActionBar(toolbar);
+
      activity.getSupportActionBar().setTitle("便签");
      // toolbar.setNavigationIcon(R.drawable.more);    //这边要留意的是setNavigationIcon需要放在 setSupportActionBar之后才会生效。
         mDrawerLayout= (DrawerLayout) view.findViewById(R.id.drawer_layout);
@@ -184,9 +228,13 @@ public class DifferentMenuFragment extends Fragment {
 
     mAppList = getActivity().getPackageManager().getInstalledApplications(0);
 
-        SwipeMenuListView listView = (SwipeMenuListView) view.findViewById(R.id.listView);
+         listView = (SwipeMenuListView) view.findViewById(R.id.listView);
+        listView.setTextFilterEnabled(true); //设置可过滤
         mAdapter = new AppAdapter();
         listView.setAdapter(mAdapter);
+        listView.setFilterText("lala");
+
+
 
 
         // step 1. create a MenuCreator
@@ -316,8 +364,9 @@ public class DifferentMenuFragment extends Fragment {
             return position % 3;
         }
 
+
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {                     //设定了列表项的view
+        public View getView(int position, View convertView, ViewGroup parent) {     //设定了列表项的view
             if (convertView == null) {
                 convertView = View.inflate(getActivity().getApplicationContext(),
                         R.layout.test_list, null);
@@ -325,8 +374,16 @@ public class DifferentMenuFragment extends Fragment {
             }
             ViewHolder holder = (ViewHolder) convertView.getTag();
             ApplicationInfo item = getItem(position);
-            holder.mTextView.setText("fututut");
-            holder.mTextView2.setText("天气不错");
+            if (position%2==0)
+            {
+                holder.mTextView.setText("fututut");
+                holder.mTextView2.setText("天气不错阿打发实打实的");
+            }
+            else
+            {
+                holder.mTextView.setText("lala");
+                holder.mTextView2.setText("lalalal");
+            }
 //            holder.iv_icon.setImageDrawable(item.loadIcon(getActivity().getPackageManager()));
 //            holder.tv_name.setText(item.loadLabel(getActivity().getPackageManager()));
             return convertView;

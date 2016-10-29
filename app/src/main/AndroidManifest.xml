@@ -17,14 +17,19 @@
         <!--</activity>-->
         <activity android:name="com.example.asus.myapplication.Activity.DifferentMenuActivity" >
         </activity>
-        <activity android:name=".Activity.testActivity"  android:theme="@style/Theme.DesignDemo">>
+        <activity android:name=".Activity.testActivity"  android:theme="@style/Theme.DesignDemo">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                       android:resource="@layout/searchable"></meta-data>
+
         </activity>
 
     </application>
+
 
 </manifest>
