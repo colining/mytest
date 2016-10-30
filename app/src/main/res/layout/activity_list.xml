@@ -21,7 +21,22 @@
         android:dividerHeight="8dp"
        />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/write"
+        app:backgroundTint="#FFD54F"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+        app:fabSize="normal"
 
+        app:layout_anchorGravity="bottom|right"
+        app:pressedTranslationZ="12dp"
+        app:rippleColor="#FF6F00"
+        android:layout_marginBottom="27dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>
 
     <android.support.design.widget.NavigationView

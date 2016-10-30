@@ -23,11 +23,13 @@
  */
 package com.example.asus.myapplication.Fragment;
 
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -56,6 +58,7 @@ import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.example.asus.myapplication.Activity.WriteActivity;
 import com.example.asus.myapplication.Model.Note;
 import com.example.asus.myapplication.Model.Notelab;
 import com.example.asus.myapplication.R;
@@ -149,7 +152,15 @@ public class DifferentMenuFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_list,container,false);
       toolbar = (Toolbar) view.findViewById(R.id.include);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
+        FloatingActionButton write = (FloatingActionButton) view.findViewById(R.id.fab);
+        write.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), WriteActivity.class);
+                startActivity(intent);
 
+            }
+        });
         activity.setSupportActionBar(toolbar);
 
      activity.getSupportActionBar().setTitle("便签");
