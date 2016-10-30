@@ -23,10 +23,7 @@
  */
 package com.example.asus.myapplication.Fragment;
 
-import android.app.Activity;
-import android.app.SearchManager;
 import android.content.pm.ApplicationInfo;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -49,8 +46,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,8 +56,14 @@ import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.example.asus.myapplication.Model.Note;
+import com.example.asus.myapplication.Model.Notelab;
 import com.example.asus.myapplication.R;
 
+import org.w3c.dom.NodeList;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -69,7 +72,8 @@ import java.util.List;
  */
 public class DifferentMenuFragment extends Fragment {
 
-    private List<ApplicationInfo> mAppList;
+    private List<Note> mNotesList;
+    private  List<Note> testlist;
     private AppAdapter mAdapter;
     private  DrawerLayout drawerLayout;
     private  Toolbar toolbar;
@@ -77,6 +81,7 @@ public class DifferentMenuFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private  SwipeMenuListView listView;
+    private  Notelab mNotelab;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,11 +115,11 @@ public class DifferentMenuFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
 
                 Log.d("lalallala",""+listView.getCount());
-                if (TextUtils.isEmpty((newText))){
-                    listView.clearTextFilter();
-                }else{
-
-                    listView.setFilterText(newText.toString());}
+//                if (TextUtils.isEmpty((newText))){
+//                    listView.clearTextFilter();
+//                }else{
+                        mAdapter.getFilter().filter(newText);
+                  //  }
                 return false;
             }
 
@@ -225,14 +230,17 @@ public class DifferentMenuFragment extends Fragment {
 
         //for crate home button
 
+        mNotelab=Notelab.getNotelab(getActivity());
+        mNotesList = mNotelab.getNotes();
+        testlist = mNotesList;
 
-    mAppList = getActivity().getPackageManager().getInstalledApplications(0);
+    //mAppList = getActivity().getPackageManager().getInstalledApplications(0);
 
          listView = (SwipeMenuListView) view.findViewById(R.id.listView);
         listView.setTextFilterEnabled(true); //设置可过滤
         mAdapter = new AppAdapter();
         listView.setAdapter(mAdapter);
-        listView.setFilterText("lala");
+
 
 
 
@@ -317,7 +325,7 @@ public class DifferentMenuFragment extends Fragment {
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {     //菜单事件
-                ApplicationInfo item = mAppList.get(position);
+                Note item =testlist.get(position);
                 switch (index) {
                     case 0:
                         // open
@@ -325,7 +333,7 @@ public class DifferentMenuFragment extends Fragment {
                     case 1:
                         // delete
 //					delete(item);
-                        mAppList.remove(position);
+                      testlist.remove(position);
                         mAdapter.notifyDataSetChanged();
                         break;
                 }
@@ -335,16 +343,17 @@ public class DifferentMenuFragment extends Fragment {
         return  view;
     }
 
-    class AppAdapter extends BaseAdapter {
+    class AppAdapter extends BaseAdapter implements Filterable {
 
         @Override
         public int getCount() {
-            return mAppList.size();
+
+            return testlist.size();
         }
 
         @Override
-        public ApplicationInfo getItem(int position) {
-            return mAppList.get(position);
+        public Note getItem(int position) {
+            return testlist.get(position);
         }
 
         @Override
@@ -373,21 +382,72 @@ public class DifferentMenuFragment extends Fragment {
                 new ViewHolder(convertView);
             }
             ViewHolder holder = (ViewHolder) convertView.getTag();
-            ApplicationInfo item = getItem(position);
-            if (position%2==0)
-            {
-                holder.mTextView.setText("fututut");
-                holder.mTextView2.setText("天气不错阿打发实打实的");
-            }
-            else
-            {
-                holder.mTextView.setText("lala");
-                holder.mTextView2.setText("lalalal");
-            }
+           Note item = getItem(position);
+           holder.mTextView.setText(testlist.get(position).getNote());
+            holder.mTextView2.setText(testlist.get(position).getTime());
 //            holder.iv_icon.setImageDrawable(item.loadIcon(getActivity().getPackageManager()));
 //            holder.tv_name.setText(item.loadLabel(getActivity().getPackageManager()));
             return convertView;
         }
+
+        @Override
+        public Filter getFilter()
+        {
+
+            return new Filter()
+            {
+                @Override
+                protected FilterResults performFiltering(CharSequence charSequence)
+                {
+                    Log.d("lalala",""+charSequence);
+                    FilterResults results = new FilterResults();
+
+                    //If there's nothing to filter on, return the original data for your list
+                    if(charSequence == null || charSequence.length() == 0)
+                    {
+                        results.values = mNotesList;
+                        results.count = mNotesList.size();
+
+                    }
+                    else
+                    {
+                        ArrayList<Note> filterResultsData = new ArrayList<Note>();
+
+                        for(Note data : mNotesList)
+                        {
+                            //In this loop, you'll filter through originalData and compare each item to charSequence.
+                            //If you find a match, add it to your new ArrayList
+                            charSequence=charSequence.toString().toLowerCase();
+                            if(data.getNote().toLowerCase().startsWith(charSequence.toString()))
+                            {
+                                Log.d("lalala",""+charSequence);
+                                filterResultsData.add(data);
+                            }
+                        }
+
+                        results.values = filterResultsData;
+
+                        results.count = filterResultsData.size();
+
+                    }
+
+                    return results;
+                }
+
+                @Override
+                protected void publishResults(CharSequence charSequence, FilterResults filterResults)
+                {
+
+                   testlist = (ArrayList<Note>)filterResults.values;
+                    Log.e("VALUES", ""+testlist.size());
+                    notifyDataSetChanged();
+                }
+            };
+
+
+        }
+
+
 
         class ViewHolder {                                                      //
 //            ImageView iv_icon;
