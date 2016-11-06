@@ -2,11 +2,30 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="com.example.asus.myapplication.Fragment.WriteFragment">
+             tools:context="com.example.asus.myapplication.Fragment.WriteFragment"
+              android:orientation="vertical"
+    >
 
     <!-- TODO: Update blank fragment layout -->
    <EditText
        android:layout_width="match_parent"
-       android:layout_height="match_parent"
+       android:layout_height="451dp"
+       android:gravity="top"
+       android:id="@+id/edittext"
        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_gravity="right"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/writebutton"
+        android:layout_gravity="center_horizontal"/>
+
 </LinearLayout>
+
