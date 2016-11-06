@@ -5,7 +5,9 @@
              tools:context="com.example.asus.myapplication.Fragment.WriteFragment"
               android:orientation="vertical"
     >
+    <include layout="@layout/toolbar"
 
+             android:id="@+id/include"/>
     <!-- TODO: Update blank fragment layout -->
    <EditText
        android:layout_width="match_parent"
@@ -14,11 +16,7 @@
        android:id="@+id/edittext"
        />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_gravity="right"/>
+
 
     <Button
         android:layout_width="wrap_content"

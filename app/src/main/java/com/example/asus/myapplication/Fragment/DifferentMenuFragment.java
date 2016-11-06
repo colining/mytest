@@ -138,11 +138,7 @@ public class DifferentMenuFragment extends Fragment {
 
 
     }
-//    @Override
-//    protected void onPostCreate(Bundle savedInstanceState) {
-//        super.onPostCreate(savedInstanceState);
-//        mActionBarDrawerToggle.syncState();
-//    }
+
 
 
 
@@ -152,6 +148,10 @@ public class DifferentMenuFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_list,container,false);
       toolbar = (Toolbar) view.findViewById(R.id.include);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
+
+        activity.setSupportActionBar(toolbar);
+
+     activity.getSupportActionBar().setTitle("便签");
         FloatingActionButton write = (FloatingActionButton) view.findViewById(R.id.fab);
         write.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,9 +161,6 @@ public class DifferentMenuFragment extends Fragment {
 
             }
         });
-        activity.setSupportActionBar(toolbar);
-
-     activity.getSupportActionBar().setTitle("便签");
      // toolbar.setNavigationIcon(R.drawable.more);    //这边要留意的是setNavigationIcon需要放在 setSupportActionBar之后才会生效。
         mDrawerLayout= (DrawerLayout) view.findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, toolbar, R.string.open, R.string.close) {
