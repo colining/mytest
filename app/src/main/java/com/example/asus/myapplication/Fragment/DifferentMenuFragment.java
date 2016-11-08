@@ -85,6 +85,7 @@ public class DifferentMenuFragment extends Fragment {
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private  SwipeMenuListView listView;
     private  Notelab mNotelab;
+    private boolean  flag;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -214,30 +215,6 @@ public class DifferentMenuFragment extends Fragment {
 
 
 
-//        //toolbar.setNavigationIcon(R.drawable.more);//设置导航栏图标
-//        toolbar.setLogo(R.mipmap.ic_launcher);//设置app logo
-//        toolbar.setTitle("Title");//设置主标题
-//        toolbar.setSubtitle("Subtitle");//设置子标题
-//
-//        toolbar.inflateMenu(R.menu.test);//设置右上角的填充菜单
-//        activity.setSupportActionBar(toolbar);
-//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                int menuItemId = item.getItemId();
-//                if (menuItemId == R.id.action_item1) {
-//                    Toast.makeText(getActivity() ,"test" , Toast.LENGTH_SHORT).show();
-//
-//                } else
-//                    Toast.makeText(getActivity() , "lalal" , Toast.LENGTH_SHORT).show();
-//
-//                return true;
-//            }
-//        });
-
-
-        //for crate home button
-
         mNotelab=Notelab.getNotelab(getActivity());
         mNotesList = mNotelab.getNotes();
         testlist = mNotesList;
@@ -265,22 +242,24 @@ public class DifferentMenuFragment extends Fragment {
                         createMenu1(menu);
                         break;
                     case 1:
-                        createMenu2(menu);
+                        createMenu0(menu);
                         break;
-                    case 2:
-                        createMenu3(menu);
-                        break;
+//                    case 2:
+//                        createMenu3(menu);
+//                        break;
                 }
             }
 
             private void createMenu1(SwipeMenu menu) {
                 SwipeMenuItem item1 = new SwipeMenuItem(
                         getActivity().getApplicationContext());
-                item1.setBackground(new ColorDrawable(Color.rgb(224, 224,
-                        224)));
-                item1.setWidth(dp2px(40));
-                item1.setIcon(R.drawable.delete);
+                item1.setBackground(new ColorDrawable(Color.GRAY));
+                item1.setWidth(dp2px(100));
+                item1.setTitle("置顶");
+                item1.setTitleSize(24);
+                item1.setTitleColor(Color.BLACK);
                 menu.addMenuItem(item1);
+
                 SwipeMenuItem item2 = new SwipeMenuItem(
                         getActivity().getApplicationContext());
 //                item2.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
@@ -290,13 +269,14 @@ public class DifferentMenuFragment extends Fragment {
                 menu.addMenuItem(item2);
             }
 
-            private void createMenu2(SwipeMenu menu) {
+            private void createMenu0(SwipeMenu menu) {
                 SwipeMenuItem item1 = new SwipeMenuItem(
                         getActivity().getApplicationContext());
-                item1.setBackground(new ColorDrawable(Color.rgb(0xE5, 0xE0,
-                        0x3F)));
-                item1.setWidth(dp2px(40));
-                item1.setIcon(R.drawable.delete);
+                item1.setBackground(new ColorDrawable(Color.GRAY));
+                item1.setWidth(dp2px(100));
+                item1.setTitle("取消置顶");
+                item1.setTitleColor(Color.BLACK);
+                item1.setTitleSize(24);
                 menu.addMenuItem(item1);
                 SwipeMenuItem item2 = new SwipeMenuItem(
                         getActivity().getApplicationContext());
@@ -307,44 +287,50 @@ public class DifferentMenuFragment extends Fragment {
                 menu.addMenuItem(item2);
             }
 
-            private void createMenu3(SwipeMenu menu) {
-                SwipeMenuItem item1 = new SwipeMenuItem(
-                        getActivity().getApplicationContext());
-                item1.setBackground(new ColorDrawable(Color.rgb(0x30, 0xB1,
-                        0xF5)));
 
-                item1.setWidth(dp2px(40));
-                item1.setIcon(R.drawable.delete);
-                menu.addMenuItem(item1);
-                SwipeMenuItem item2 = new SwipeMenuItem(
-                        getActivity().getApplicationContext());
-                item2.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
-                        0xCE)));
-                item2.setWidth(dp2px(40));
-                item2.setIcon(R.drawable.delete);
-                menu.addMenuItem(item2);
-            }
         };
         // set creator
         listView.setMenuCreator(creator);
 
 
         // step 2. listener item click event
+
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {     //菜单事件
                 Note item =testlist.get(position);
+                Log.d("postion",""+position);
                 switch (index) {
+
                     case 0:
-                        // open
+                    {
+                        if (position==0)
+                        {
+                            testlist.remove(position);
+                            testlist.add(testlist.size(),item);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                        else {
+
+                        testlist.remove(position);
+                        testlist.add(0,item);
+                            mAdapter.notifyDataSetChanged();
+
+                        }
+
+                        listView.smoothScrollToPositionFromTop(0,0);
+                        //listView.setSelection(0);
+                    }
                         break;
-                    case 1:
-                        // delete
-//					delete(item);
-                      testlist.remove(position);
+                    case 1: {
+                        testlist.remove(position);
                         mAdapter.notifyDataSetChanged();
+                    }
                         break;
+
+
                 }
+
                 return false;
             }
         });
@@ -378,7 +364,11 @@ public class DifferentMenuFragment extends Fragment {
         @Override
         public int getItemViewType(int position) {
             // current menu type
-            return position % 3;
+            if(position==0)
+            {
+                    return  1;
+            }
+            return 0;
         }
 
 
@@ -393,8 +383,7 @@ public class DifferentMenuFragment extends Fragment {
            Note item = getItem(position);
            holder.mTextView.setText(testlist.get(position).getNote());
             holder.mTextView2.setText(testlist.get(position).getTime());
-//            holder.iv_icon.setImageDrawable(item.loadIcon(getActivity().getPackageManager()));
-//            holder.tv_name.setText(item.loadLabel(getActivity().getPackageManager()));
+
             return convertView;
         }
 
@@ -458,21 +447,12 @@ public class DifferentMenuFragment extends Fragment {
 
 
         class ViewHolder {                                                      //
-//            ImageView iv_icon;
-//            TextView tv_name;
-//
-//            public ViewHolder(View view) {
-//                iv_icon = (ImageView) view.findViewById(R.id.iv_icon);
-//                tv_name = (TextView) view.findViewById(R.id.tv_name);
-//                view.setTag(this);
-//            }
+
             TextView mTextView;
             TextView mTextView2;
-            //
+
             public ViewHolder(View view) {
-//                iv_icon = (ImageView) view.findViewById(R.id.iv_icon);
-//                tv_name = (TextView) view.findViewById(R.id.tv_name);
-//                view.setTag(this);
+
                 mTextView = (TextView) view.findViewById(R.id.textView);
                 mTextView2 = (TextView) view.findViewById( R.id.textView2);
                 view.setTag(this);

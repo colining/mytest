@@ -131,7 +131,6 @@ public class WriteFragment extends Fragment {
         startActivityForResult(intent, IMAGE_CODE);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
