@@ -103,16 +103,17 @@ public class WriteFragment extends Fragment {
     }
     private void addImageSpan() {
 
-        SpannableString spanString = new SpannableString(" ");
+        SpannableString spanString = new SpannableString("image");
 //        Drawable d = getResources().getDrawable(R.drawable.ic_launcher);
      //   BitmapDrawable d= new BitmapDrawable(bm);
 
      //   d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
         ImageSpan span = new ImageSpan(getActivity(),bm);
-        spanString.setSpan(span, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-       // editText.append(spanString);
+        spanString.setSpan(span, 0, spanString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+       //editText.append(spanString);
+
         int index = editText.getSelectionStart();
-// 获取光标所在位置
+                // 获取光标所在位置
         Editable edit_text = editText.getEditableText();
         if (index < 0 || index >= edit_text.length()) {
             edit_text.append(spanString);
@@ -145,12 +146,14 @@ public class WriteFragment extends Fragment {
            try {
                  originalUri = data.getData(); // 获得图片的uri
                bm = MediaStore.Images.Media.getBitmap(resolver, originalUri);
+
                float scaleWidth = ((float) width) / bm.getWidth();
 
 
                Matrix matrix = new Matrix();
                matrix.postScale(scaleWidth/2, scaleWidth/2);
                bm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(),matrix,true);
+               addImageSpan();
               // mImageView.setImageBitmap(bm);
 //                // imageView.setImageBitmap(ThumbnailUtils.extractThumbnail(bm, 100, 100));  //使用系统的一个工具类，参数列表为 Bitmap Width,Height  这里使用压缩后显示，否则在华为手机上ImageView 没有显示
 //                // 显得到bitmap图片
@@ -175,9 +178,11 @@ public class WriteFragment extends Fragment {
 
            finally {
                return;
-          }
+           }
         }
-        addImageSpan();
+
+
+
 
         super.onActivityResult(requestCode, resultCode, data);
 

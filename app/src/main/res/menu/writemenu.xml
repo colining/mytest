@@ -6,5 +6,6 @@
            android:orderInCategory="60"
            android:title="action_search"
            android:icon="@drawable/insert"
+
            app:showAsAction="ifRoom"/>
 </menu>
