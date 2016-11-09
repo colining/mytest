@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -30,10 +31,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.asus.myapplication.Activity.WriteActivity;
+import com.example.asus.myapplication.Model.Note;
+import com.example.asus.myapplication.Model.Notelab;
 import com.example.asus.myapplication.Model.VerticalImageSpan;
 import com.example.asus.myapplication.R;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by asus on 2016/10/30.
@@ -48,14 +54,19 @@ public class WriteFragment extends Fragment {
     private  Matrix mMatrix;
     private  int width;
     private  Toolbar toolbar;
-
+    private  Note mNote;
+    private  int position;
+    private  int sql_code;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
+        position = (int) getActivity().getIntent().getSerializableExtra(WriteActivity.EXTRA_NOTE_POSITION);
+        sql_code = (int) getActivity().getIntent().getSerializableExtra(WriteActivity.SQL);
 
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
+
     }
     @Nullable
     @Override
@@ -63,7 +74,14 @@ public class WriteFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_write,container,false);
         toolbar = (Toolbar) v.findViewById(R.id.include);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
+        toolbar.setNavigationIcon(R.drawable.insert);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+
+            }
+        });
         activity.setSupportActionBar(toolbar);
 
         activity.getSupportActionBar().setTitle("便签");
@@ -83,6 +101,24 @@ public class WriteFragment extends Fragment {
         return  v;
 
     }
+
+    @Override
+    public void onPause() {
+            if(sql_code==0)
+            {
+                Notelab notelab = Notelab.getNotelab(getActivity());
+                Note note = new Note(position);
+                note.setNote(editText.getText().toString());
+
+                SimpleDateFormat formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd HH:mm");
+                Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间
+                note.setmDate(curDate);
+                notelab.addNote(note);
+
+            }
+        super.onPause();
+    }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

@@ -6,9 +6,14 @@ import java.util.Date;
  * Created by asus on 2016/10/30.
  */
 public class Note {
-        private String time;
+        private Date mDate;
     private String note;
     private  int postion;
+    public Note(int postion)
+    {
+        this.postion = postion;
+        mDate = new Date();
+    }
 
 
     public String getNote() {
@@ -19,12 +24,12 @@ public class Note {
         this.note = note;
     }
 
-    public String getTime() {
-        return time;
+    public Date getmDate() {
+        return mDate;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setmDate(Date time) {
+        mDate= time;
     }
 
     public int getPostion() {

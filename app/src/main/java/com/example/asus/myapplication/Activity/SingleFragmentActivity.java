@@ -7,17 +7,18 @@ import android.view.Window;
 
 import com.example.asus.myapplication.R;
 
+
 /**
  * Created by asus on 2016/7/7.
  */
 public abstract class SingleFragmentActivity extends AppCompatActivity {
+
     protected  abstract Fragment createFragment();         //定义createFragemnt的抽象函数
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-//        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,R.layout.title);
+
         setContentView(R.layout.activity_fragment);
 
         android.support.v4.app.FragmentManager fm=getSupportFragmentManager();

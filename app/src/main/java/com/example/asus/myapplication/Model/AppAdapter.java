@@ -1,4 +1,4 @@
-package com.example.asus.myapplication;
+package com.example.asus.myapplication.Model;
 
 import android.view.View;
 import android.view.ViewGroup;

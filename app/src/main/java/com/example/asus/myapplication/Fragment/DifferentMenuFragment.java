@@ -23,8 +23,9 @@
  */
 package com.example.asus.myapplication.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -38,7 +39,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -47,6 +47,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -59,14 +60,13 @@ import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.asus.myapplication.Activity.WriteActivity;
+import com.example.asus.myapplication.DB.DataBaseHelper;
 import com.example.asus.myapplication.Model.Note;
 import com.example.asus.myapplication.Model.Notelab;
 import com.example.asus.myapplication.R;
-
-import org.w3c.dom.NodeList;
+import com.idescout.sql.SqlScoutServer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -86,13 +86,16 @@ public class DifferentMenuFragment extends Fragment {
     private  SwipeMenuListView listView;
     private  Notelab mNotelab;
     private boolean  flag;
+    private  int MYSQL_CODE=0;
+    private   int note_id = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
 
-        super.onCreate(savedInstanceState);
 
+        super.onCreate(savedInstanceState);
+       // SqlScoutServer.create(getActivity(), getActivity().getPackageName());
         setHasOptionsMenu(true);
     }
 
@@ -157,9 +160,10 @@ public class DifferentMenuFragment extends Fragment {
         write.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), WriteActivity.class);
+//                Intent intent = new Intent(getActivity(), WriteActivity.class);
+//                startActivity(intent);
+                Intent intent = WriteActivity.newIntent(getActivity(),mNotelab.getNotes().size(),MYSQL_CODE);
                 startActivity(intent);
-
             }
         });
      // toolbar.setNavigationIcon(R.drawable.more);    //这边要留意的是setNavigationIcon需要放在 setSupportActionBar之后才会生效。
@@ -183,8 +187,6 @@ public class DifferentMenuFragment extends Fragment {
 
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);//设置监听器
-
-
         //设置导航栏NavigationView的点击事件
         NavigationView mNavigationView = (NavigationView) view.findViewById(R.id.navigation_view);
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -225,6 +227,16 @@ public class DifferentMenuFragment extends Fragment {
         listView.setTextFilterEnabled(true); //设置可过滤
         mAdapter = new AppAdapter();
         listView.setAdapter(mAdapter);
+       listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+           @Override
+           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               MYSQL_CODE=0;
+                note_id= testlist.get(position).getPostion();
+               Intent intent = WriteActivity.newIntent(getActivity(),note_id,MYSQL_CODE);
+               startActivity(intent);
+           }
+       });
 
 
 
@@ -382,7 +394,7 @@ public class DifferentMenuFragment extends Fragment {
             ViewHolder holder = (ViewHolder) convertView.getTag();
            Note item = getItem(position);
            holder.mTextView.setText(testlist.get(position).getNote());
-            holder.mTextView2.setText(testlist.get(position).getTime());
+            holder.mTextView2.setText(testlist.get(position).getmDate().toString());
 
             return convertView;
         }
