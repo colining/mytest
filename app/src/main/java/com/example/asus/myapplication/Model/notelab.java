@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.asus.myapplication.DB.DataBaseHelper;
 import com.example.asus.myapplication.DB.NoteCursorWrapper;
@@ -25,7 +26,7 @@ public class Notelab {
     private SQLiteDatabase mDatabase;
 
     public static Notelab getNotelab(Context context) {
-        if(sNotelab == null)
+//        if(sNotelab == null)
             sNotelab = new Notelab(context);
         return sNotelab;
     }
@@ -52,18 +53,6 @@ public class Notelab {
         mContext = context.getApplicationContext();
         mDatabase = new DataBaseHelper(mContext).getWritableDatabase();
 
-        //mNotes= new ArrayList<>();
-//      for (int i = 0;i<100;i++)
-//      {
-//          Note note = new Note();
-//
-//          note.setNote("lalalal"+i*100);
-//          if (i ==2)
-//              note.setNote("wwwww");
-//          note.setPostion(i);
-//          note.setTime("lalalal");
-//          mNotes.add(note);
-//      }
     }
 
     private  Note getNote(int position)
@@ -84,8 +73,8 @@ public class Notelab {
     private static ContentValues getContentValues(Note note)
     {
         ContentValues values = new ContentValues();
-        values.put(NoteTable.Cols.Position,note.getPostion());
-        values.put(NoteTable.Cols.Date,note.getmDate().getTime());
+        values.put(NoteTable.Cols.Position,String.valueOf(note.getPostion()));
+        values.put(NoteTable.Cols.Date,String.valueOf(note.getmDate().getTime()));
         values.put(NoteTable.Cols.Note,note.getNote());
 
         return  values;
@@ -99,9 +88,18 @@ public class Notelab {
 
     public void  updateNote(Note note)
     {
-        String position = String.valueOf(note.getPostion());
+
        ContentValues values = getContentValues(note);
-        mDatabase . update(NoteTable.NAME,values,NoteTable.Cols.Position +"=?",new String[]{position});
+        String where = "position=?";
+        String[] whereArgs = new String[] {String.valueOf(note.getPostion())};
+        mDatabase.update(NoteTable.NAME,values,where,whereArgs);
+    }
+    public void  deleteNote(Note note)
+    {
+        String position = String.valueOf(note.getPostion());
+        Log.d("lalaal",position);
+        ContentValues values = getContentValues(note);
+        mDatabase.delete(NoteTable.NAME,NoteTable.Cols.Position +" = ?",new String[]{position});
     }
 
     private NoteCursorWrapper queryNote(String whereClause, String[] whereArgs)

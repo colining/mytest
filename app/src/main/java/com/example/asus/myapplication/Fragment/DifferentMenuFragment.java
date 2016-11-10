@@ -97,6 +97,9 @@ public class DifferentMenuFragment extends Fragment {
         super.onCreate(savedInstanceState);
        // SqlScoutServer.create(getActivity(), getActivity().getPackageName());
         setHasOptionsMenu(true);
+        mAdapter=new AppAdapter();
+        updateUI();
+
     }
 
 
@@ -145,7 +148,18 @@ public class DifferentMenuFragment extends Fragment {
 
 
 
+    public  void updateUI()
+    {
+        mNotelab=Notelab.getNotelab(getActivity());
+        mNotesList = mNotelab.getNotes();
+        Log.d("lalala",""+mNotesList.size());
+        testlist = mNotesList;
 
+
+        mAdapter.notifyDataSetChanged();
+        Log.d("lalala","lalal");
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -160,8 +174,7 @@ public class DifferentMenuFragment extends Fragment {
         write.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(getActivity(), WriteActivity.class);
-//                startActivity(intent);
+                MYSQL_CODE=0;
                 Intent intent = WriteActivity.newIntent(getActivity(),mNotelab.getNotes().size(),MYSQL_CODE);
                 startActivity(intent);
             }
@@ -217,21 +230,19 @@ public class DifferentMenuFragment extends Fragment {
 
 
 
-        mNotelab=Notelab.getNotelab(getActivity());
-        mNotesList = mNotelab.getNotes();
-        testlist = mNotesList;
 
-    //mAppList = getActivity().getPackageManager().getInstalledApplications(0);
+
+
 
          listView = (SwipeMenuListView) view.findViewById(R.id.listView);
         listView.setTextFilterEnabled(true); //设置可过滤
-        mAdapter = new AppAdapter();
+
         listView.setAdapter(mAdapter);
        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
            @Override
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               MYSQL_CODE=0;
+               MYSQL_CODE=1;
                 note_id= testlist.get(position).getPostion();
                Intent intent = WriteActivity.newIntent(getActivity(),note_id,MYSQL_CODE);
                startActivity(intent);
@@ -336,11 +347,10 @@ public class DifferentMenuFragment extends Fragment {
                         break;
                     case 1: {
                         testlist.remove(position);
+                        mNotelab.deleteNote(item);
                         mAdapter.notifyDataSetChanged();
                     }
                         break;
-
-
                 }
 
                 return false;
@@ -349,8 +359,19 @@ public class DifferentMenuFragment extends Fragment {
         return  view;
     }
 
+    @Override
+    public void onResume() {
+
+        super.onResume();
+        updateUI();
+    }
+
     class AppAdapter extends BaseAdapter implements Filterable {
 
+//        public  void setNotes(List<Note> notes)
+//        {
+//            testlist=notes;
+//        }
         @Override
         public int getCount() {
 

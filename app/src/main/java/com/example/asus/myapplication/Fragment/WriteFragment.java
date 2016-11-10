@@ -34,12 +34,13 @@ import android.widget.ImageView;
 import com.example.asus.myapplication.Activity.WriteActivity;
 import com.example.asus.myapplication.Model.Note;
 import com.example.asus.myapplication.Model.Notelab;
-import com.example.asus.myapplication.Model.VerticalImageSpan;
+
 import com.example.asus.myapplication.R;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by asus on 2016/10/30.
@@ -71,6 +72,10 @@ public class WriteFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+       Notelab notelab = Notelab.getNotelab(getActivity());
+        List<Note> notes = notelab.getNotes();
+
+
         View v = inflater.inflate(R.layout.fragment_write,container,false);
         toolbar = (Toolbar) v.findViewById(R.id.include);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
@@ -87,6 +92,8 @@ public class WriteFragment extends Fragment {
         activity.getSupportActionBar().setTitle("便签");
 
         editText = (EditText) v.findViewById(R.id.edittext);
+        if (position<notelab.getNotes().size())
+        editText.setText(  notes.get(position).getNote().toString());
         width= getActivity().getResources().getDisplayMetrics().widthPixels;
 //        Button button = (Button) v.findViewById(R.id.writebutton);
 //        button.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +111,7 @@ public class WriteFragment extends Fragment {
 
     @Override
     public void onPause() {
-            if(sql_code==0)
+            if(sql_code==0) //添加
             {
                 Notelab notelab = Notelab.getNotelab(getActivity());
                 Note note = new Note(position);
@@ -115,6 +122,17 @@ public class WriteFragment extends Fragment {
                 note.setmDate(curDate);
                 notelab.addNote(note);
 
+            }
+        else                                //修改
+            {
+                Notelab notelab = Notelab.getNotelab(getActivity());
+                Note note = new Note(position);
+                note.setNote(editText.getText().toString());
+
+                SimpleDateFormat formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd HH:mm");
+                Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间
+                note.setmDate(curDate);
+              Notelab.getNotelab(getActivity()).updateNote(note);
             }
         super.onPause();
     }
