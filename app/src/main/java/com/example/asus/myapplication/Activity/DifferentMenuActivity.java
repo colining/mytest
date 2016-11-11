@@ -200,6 +200,7 @@ public class DifferentMenuActivity  extends Activity {
             ViewHolder holder = (ViewHolder) convertView.getTag();
             ApplicationInfo item = getItem(position);
             holder.mTextView.setText("2010,2,9");
+
             holder.mTextView2.setText("天气不错");
 //            holder.iv_icon.setImageDrawable(item.loadIcon(getPackageManager()));
 //            holder.tv_name.setText(item.loadLabel(getPackageManager()));

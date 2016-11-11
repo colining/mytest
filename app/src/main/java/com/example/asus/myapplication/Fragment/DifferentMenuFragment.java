@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -64,7 +65,7 @@ import com.example.asus.myapplication.DB.DataBaseHelper;
 import com.example.asus.myapplication.Model.Note;
 import com.example.asus.myapplication.Model.Notelab;
 import com.example.asus.myapplication.R;
-import com.idescout.sql.SqlScoutServer;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,8 +98,10 @@ public class DifferentMenuFragment extends Fragment {
         super.onCreate(savedInstanceState);
        // SqlScoutServer.create(getActivity(), getActivity().getPackageName());
         setHasOptionsMenu(true);
+       //testlist = mNotelab.getNotes();
         mAdapter=new AppAdapter();
         updateUI();
+
 
     }
 
@@ -153,17 +156,15 @@ public class DifferentMenuFragment extends Fragment {
         mNotelab=Notelab.getNotelab(getActivity());
         mNotesList = mNotelab.getNotes();
         Log.d("lalala",""+mNotesList.size());
-        testlist = mNotesList;
-
-
+        mAdapter.setNotes(mNotesList);
         mAdapter.notifyDataSetChanged();
         Log.d("lalala","lalal");
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_list,container,false);
+
       toolbar = (Toolbar) view.findViewById(R.id.include);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
 
@@ -227,23 +228,17 @@ public class DifferentMenuFragment extends Fragment {
             }
         });
 
-
-
-
-
-
-
-
          listView = (SwipeMenuListView) view.findViewById(R.id.listView);
         listView.setTextFilterEnabled(true); //设置可过滤
 
         listView.setAdapter(mAdapter);
        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
            @Override
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                MYSQL_CODE=1;
-                note_id= testlist.get(position).getPostion();
+               Log.d("lalala",""+testlist.size());
+                note_id= testlist.get(testlist.size()-position-1).getPostion();
+               Log.d("lalala",""+note_id);
                Intent intent = WriteActivity.newIntent(getActivity(),note_id,MYSQL_CODE);
                startActivity(intent);
            }
@@ -322,25 +317,26 @@ public class DifferentMenuFragment extends Fragment {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {     //菜单事件
                 Note item =testlist.get(position);
-                Log.d("postion",""+position);
+                Log.d("postion",""+item.getPostion());
                 switch (index) {
-
                     case 0:
                     {
-                        if (position==0)
+                        if (position==0)        //取消置顶
                         {
                             testlist.remove(position);
                             testlist.add(testlist.size(),item);
                             mAdapter.notifyDataSetChanged();
                         }
                         else {
+//                        testlist.remove(position);
+//                        testlist.add(0,item);
+//                            Notelab.getNotelab(getActivity()).deleteNote(item);
+//                            item.setPostion(testlist.size()+1);
+//                            Notelab.getNotelab(getActivity()).addNote(item);
 
-                        testlist.remove(position);
-                        testlist.add(0,item);
-                            mAdapter.notifyDataSetChanged();
+                           updateUI();
 
                         }
-
                         listView.smoothScrollToPositionFromTop(0,0);
                         //listView.setSelection(0);
                     }
@@ -368,10 +364,10 @@ public class DifferentMenuFragment extends Fragment {
 
     class AppAdapter extends BaseAdapter implements Filterable {
 
-//        public  void setNotes(List<Note> notes)
-//        {
-//            testlist=notes;
-//        }
+        public  void setNotes(List<Note> notes)
+        {
+            testlist=notes;
+        }
         @Override
         public int getCount() {
 
@@ -414,8 +410,8 @@ public class DifferentMenuFragment extends Fragment {
             }
             ViewHolder holder = (ViewHolder) convertView.getTag();
            Note item = getItem(position);
-           holder.mTextView.setText(testlist.get(position).getNote());
-            holder.mTextView2.setText(testlist.get(position).getmDate().toString());
+           holder.mTextView2.setText(testlist.get(position).getNote());
+            holder.mTextView.setText(testlist.get(position).getmDate().toString());
 
             return convertView;
         }

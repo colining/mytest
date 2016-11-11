@@ -20,11 +20,11 @@ public class NoteCursorWrapper extends CursorWrapper {
 
     public Note getNote()
     {
-        int positon = getInt(getColumnIndex(NoteTable.Cols.Position));
+        int position = getInt(getColumnIndex(NoteTable.Cols.Position));
         String  note= getString(getColumnIndex(NoteTable.Cols.Note));
         long date = getLong(getColumnIndex(NoteTable.Cols.Date));
 
-        Note note1 = new Note(positon);
+        Note note1 = new Note(position);
         note1.setNote(note);
         note1.setmDate(new Date(date));
         return  note1;

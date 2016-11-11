@@ -31,28 +31,41 @@ public class Notelab {
         return sNotelab;
     }
 
-    public List<Note> getNotes() {
-       // return mNotes;
-       // return  new ArrayList<>();
-        List<Note> notes = new ArrayList<>();
-        NoteCursorWrapper cursorWrapper = queryNote(null,null);
-        try{
-            cursorWrapper.moveToFirst();
-            while (!cursorWrapper.isAfterLast())
-            {
-                notes.add(cursorWrapper.getNote());
-                cursorWrapper.moveToNext();
-            }
-        }finally {
-            cursorWrapper.close();
+//    public List<Note> getNotes() {
+//        List<Note> notes = new ArrayList<>();
+//        NoteCursorWrapper cursorWrapper = queryNote(null,null);
+//        try{
+//            cursorWrapper.moveToFirst();
+//            while (!cursorWrapper.isAfterLast())
+//            {
+//                notes.add(cursorWrapper.getNote());
+//                cursorWrapper.moveToNext();
+//            }
+//        }finally {
+//            cursorWrapper.close();
+//        }
+//        return notes;
+//    }
+public List<Note> getNotes() {
+    List<Note> notes = new ArrayList<>();
+    NoteCursorWrapper cursorWrapper = queryNote(null,null);
+    try{
+        cursorWrapper.moveToLast();
+        while (!cursorWrapper.isBeforeFirst())
+        {
+            notes.add(cursorWrapper.getNote());
+            Log.d("lalala","position"+cursorWrapper.getNote().getPostion()+"\n");
+            cursorWrapper.moveToPrevious();
         }
-        return notes;
+    }finally {
+        cursorWrapper.close();
     }
+    return notes;
+}
     private  Notelab(Context context)
     {
         mContext = context.getApplicationContext();
         mDatabase = new DataBaseHelper(mContext).getWritableDatabase();
-
     }
 
     private  Note getNote(int position)

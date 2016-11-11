@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.asus.myapplication.DB.NoteSchema.NoteTable;
-import com.idescout.sql.SqlScoutServer;
+
 
 public class DataBaseHelper extends SQLiteOpenHelper {
             private  static  final  int VERSION = 1;
@@ -22,7 +22,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("DROP TABLE IF EXISTS "+NoteTable.NAME);
+      //  db.execSQL("DROP TABLE IF EXISTS "+NoteTable.NAME);
         //创建person表
        // db.execSQL("DROP TABLE IF EXISTS person");
 

@@ -58,14 +58,13 @@ public class WriteFragment extends Fragment {
     private  Note mNote;
     private  int position;
     private  int sql_code;
+    private  List<Note> notes;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         position = (int) getActivity().getIntent().getSerializableExtra(WriteActivity.EXTRA_NOTE_POSITION);
         sql_code = (int) getActivity().getIntent().getSerializableExtra(WriteActivity.SQL);
-
         super.onCreate(savedInstanceState);
-
         setHasOptionsMenu(true);
 
     }
@@ -73,8 +72,7 @@ public class WriteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
        Notelab notelab = Notelab.getNotelab(getActivity());
-        List<Note> notes = notelab.getNotes();
-
+        notes = notelab.getNotes();
 
         View v = inflater.inflate(R.layout.fragment_write,container,false);
         toolbar = (Toolbar) v.findViewById(R.id.include);
@@ -116,7 +114,6 @@ public class WriteFragment extends Fragment {
                 Notelab notelab = Notelab.getNotelab(getActivity());
                 Note note = new Note(position);
                 note.setNote(editText.getText().toString());
-
                 SimpleDateFormat formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd HH:mm");
                 Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间
                 note.setmDate(curDate);
@@ -126,7 +123,7 @@ public class WriteFragment extends Fragment {
         else                                //修改
             {
                 Notelab notelab = Notelab.getNotelab(getActivity());
-                Note note = new Note(position);
+                Note note = new Note(notes.size()-position-1);
                 note.setNote(editText.getText().toString());
 
                 SimpleDateFormat formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd HH:mm");
