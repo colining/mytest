@@ -29,6 +29,7 @@ public class Notelab {
 //        if(sNotelab == null)
             sNotelab = new Notelab(context);
         return sNotelab;
+
     }
 
 //    public List<Note> getNotes() {
@@ -48,14 +49,27 @@ public class Notelab {
 //    }
 public List<Note> getNotes() {
     List<Note> notes = new ArrayList<>();
-    NoteCursorWrapper cursorWrapper = queryNote(null,null);
+    NoteCursorWrapper cursorWrapper = queryNote(null,null);  //queryNote(null,null);
+    Note note = new Note(-1);
+    int i =0;
     try{
         cursorWrapper.moveToLast();
-        while (!cursorWrapper.isBeforeFirst())
+        while (!cursorWrapper.isBeforeFirst()) {
+            if (cursorWrapper.getNote().getPostion() == -1) {
+
+                i = 1;
+                note = cursorWrapper.getNote();
+
+            } else {
+                notes.add(cursorWrapper.getNote());
+                Log.d("mytest",cursorWrapper.getNote().getNote());
+                //Log.d("lalala","position"+cursorWrapper.getNote().getPostion()+"\n");
+                cursorWrapper.moveToPrevious();
+            }
+        }
+        if (i==1)
         {
-            notes.add(cursorWrapper.getNote());
-            Log.d("lalala","position"+cursorWrapper.getNote().getPostion()+"\n");
-            cursorWrapper.moveToPrevious();
+            notes.add(note);
         }
     }finally {
         cursorWrapper.close();
@@ -70,13 +84,16 @@ public List<Note> getNotes() {
 
     private  Note getNote(int position)
     {
+        Note note;
     NoteCursorWrapper cursorWrapper = queryNote(NoteTable.Cols.Position +"=?",new String[]{String.valueOf(position)});
         try {
             if (cursorWrapper.getCount()==0)
             {
                 return null;
             }
+
             cursorWrapper.moveToFirst();
+
             return  cursorWrapper.getNote();
         }
         finally {
@@ -107,6 +124,7 @@ public List<Note> getNotes() {
         String[] whereArgs = new String[] {String.valueOf(note.getPostion())};
         mDatabase.update(NoteTable.NAME,values,where,whereArgs);
     }
+
     public void  deleteNote(Note note)
     {
         String position = String.valueOf(note.getPostion());
@@ -128,4 +146,18 @@ public List<Note> getNotes() {
         );
         return  new NoteCursorWrapper(cursor);
     }
+    private NoteCursorWrapper querydate()
+    {
+        Cursor cursor = mDatabase.query(
+                NoteTable.NAME,
+                null,
+               null,
+                null,
+                null,
+                "date DESC",
+                null
+        );
+        return  new NoteCursorWrapper(cursor);
+    }
+
 }

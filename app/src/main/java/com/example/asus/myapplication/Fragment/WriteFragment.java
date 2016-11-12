@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.asus.myapplication.Activity.DifferentMenuActivity;
 import com.example.asus.myapplication.Activity.WriteActivity;
 import com.example.asus.myapplication.Model.Note;
 import com.example.asus.myapplication.Model.Notelab;
@@ -77,16 +78,42 @@ public class WriteFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_write,container,false);
         toolbar = (Toolbar) v.findViewById(R.id.include);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        toolbar.setNavigationIcon(R.drawable.insert);
+        toolbar.setNavigationIcon(R.drawable.sure);
+
+        activity.setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("mytest","lalalalal");
+                if(sql_code==0) //添加
+                {
+                    Notelab notelab = Notelab.getNotelab(getActivity());
+                    Note note = new Note(position);
+                    note.setNote(editText.getText().toString());
+                    SimpleDateFormat formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd HH:mm");
+                    Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间
+                    note.setmDate(curDate);
+                    notelab.addNote(note);
+                }
+                else                                //修改
+                {
+                    Notelab notelab = Notelab.getNotelab(getActivity());
+                    Note note = new Note(notes.size()-position-1);
+                    note.setNote(editText.getText().toString());
 
+                    SimpleDateFormat formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd HH:mm");
+                    Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间
+                    note.setmDate(curDate);
+                    Notelab.getNotelab(getActivity()).updateNote(note);
+                }
+//
+//                Intent intent = new Intent(getActivity(),DifferentMenuActivity.class);
+//                //启动intent对应的Activity
+//                startActivity(intent);
 
+                getActivity().finish();
             }
         });
-        activity.setSupportActionBar(toolbar);
-
         activity.getSupportActionBar().setTitle("便签");
 
         editText = (EditText) v.findViewById(R.id.edittext);
@@ -109,28 +136,6 @@ public class WriteFragment extends Fragment {
 
     @Override
     public void onPause() {
-            if(sql_code==0) //添加
-            {
-                Notelab notelab = Notelab.getNotelab(getActivity());
-                Note note = new Note(position);
-                note.setNote(editText.getText().toString());
-                SimpleDateFormat formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd HH:mm");
-                Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间
-                note.setmDate(curDate);
-                notelab.addNote(note);
-
-            }
-        else                                //修改
-            {
-                Notelab notelab = Notelab.getNotelab(getActivity());
-                Note note = new Note(notes.size()-position-1);
-                note.setNote(editText.getText().toString());
-
-                SimpleDateFormat formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd HH:mm");
-                Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间
-                note.setmDate(curDate);
-              Notelab.getNotelab(getActivity()).updateNote(note);
-            }
         super.onPause();
     }
 

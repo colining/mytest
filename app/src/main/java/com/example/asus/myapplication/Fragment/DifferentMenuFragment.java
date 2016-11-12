@@ -89,7 +89,9 @@ public class DifferentMenuFragment extends Fragment {
     private boolean  flag;
     private  int MYSQL_CODE=0;
     private   int note_id = -1;
-
+    private  int mposition;
+    private  boolean TOP=false;
+    private  Note item;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -155,6 +157,11 @@ public class DifferentMenuFragment extends Fragment {
     {
         mNotelab=Notelab.getNotelab(getActivity());
         mNotesList = mNotelab.getNotes();
+//        if (TOP == true)
+//        {
+//            mNotesList.remove(mposition);
+//            mNotesList.add(0,item);
+//        }
         Log.d("lalala",""+mNotesList.size());
         mAdapter.setNotes(mNotesList);
         mAdapter.notifyDataSetChanged();
@@ -237,7 +244,8 @@ public class DifferentMenuFragment extends Fragment {
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                MYSQL_CODE=1;
                Log.d("lalala",""+testlist.size());
-                note_id= testlist.get(testlist.size()-position-1).getPostion();
+                note_id= testlist.get(position).getPostion();
+
                Log.d("lalala",""+note_id);
                Intent intent = WriteActivity.newIntent(getActivity(),note_id,MYSQL_CODE);
                startActivity(intent);
@@ -316,8 +324,9 @@ public class DifferentMenuFragment extends Fragment {
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {     //菜单事件
-                Note item =testlist.get(position);
+                item =testlist.get(position);
                 Log.d("postion",""+item.getPostion());
+
                 switch (index) {
                     case 0:
                     {
@@ -325,18 +334,26 @@ public class DifferentMenuFragment extends Fragment {
                         {
                             testlist.remove(position);
                             testlist.add(testlist.size(),item);
-                            mAdapter.notifyDataSetChanged();
+                            //mAdapter.notifyDataSetChanged();
                         }
                         else {
-//                        testlist.remove(position);
-//                        testlist.add(0,item);
-//                            Notelab.getNotelab(getActivity()).deleteNote(item);
-//                            item.setPostion(testlist.size()+1);
-//                            Notelab.getNotelab(getActivity()).addNote(item);
 
-                           updateUI();
+                            mposition= item.getPostion();
+                            TOP=true;
+//                           Note item2 = testlist.get(0);
+//                            Notelab.getNotelab(getActivity()).deleteNote(item2);
+//
+//                            Notelab.getNotelab(getActivity()).deleteNote(item);
+//                            item.setPostion(-1);
+//                            Notelab.getNotelab(getActivity()).addNote(item);
+//
+//                            mposition = item.getPostion();
+                         //  updateUI();
+                            //mAdapter.notifyDataSetChanged();
+
 
                         }
+                        updateUI();
                         listView.smoothScrollToPositionFromTop(0,0);
                         //listView.setSelection(0);
                     }
@@ -410,8 +427,11 @@ public class DifferentMenuFragment extends Fragment {
             }
             ViewHolder holder = (ViewHolder) convertView.getTag();
            Note item = getItem(position);
-           holder.mTextView2.setText(testlist.get(position).getNote());
-            holder.mTextView.setText(testlist.get(position).getmDate().toString());
+
+
+                holder.mTextView2.setText(testlist.get(testlist.size() - position - 1).getNote());
+                holder.mTextView.setText(testlist.get(testlist.size() - position - 1).getmDate().toString());
+
 
             return convertView;
         }
