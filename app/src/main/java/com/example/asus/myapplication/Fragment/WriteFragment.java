@@ -88,7 +88,8 @@ public class WriteFragment extends Fragment {
                 if(sql_code==0) //添加
                 {
                     Notelab notelab = Notelab.getNotelab(getActivity());
-                    Note note = new Note(position);
+                   Note note = new Note(position);
+
                     note.setNote(editText.getText().toString());
                     SimpleDateFormat formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd HH:mm");
                     Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间
@@ -98,9 +99,9 @@ public class WriteFragment extends Fragment {
                 else                                //修改
                 {
                     Notelab notelab = Notelab.getNotelab(getActivity());
-                    Note note = new Note(notes.size()-position-1);
+                    position= notes.get(position).getPostion();
+                    Note note = new Note(position);
                     note.setNote(editText.getText().toString());
-
                     SimpleDateFormat formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd HH:mm");
                     Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间
                     note.setmDate(curDate);
@@ -117,8 +118,9 @@ public class WriteFragment extends Fragment {
         activity.getSupportActionBar().setTitle("便签");
 
         editText = (EditText) v.findViewById(R.id.edittext);
-        if (position<notelab.getNotes().size())
-        editText.setText(  notes.get(position).getNote().toString());
+        if (sql_code==1) {
+            editText.setText(notes.get(position).getNote().toString());
+        }
         width= getActivity().getResources().getDisplayMetrics().widthPixels;
 //        Button button = (Button) v.findViewById(R.id.writebutton);
 //        button.setOnClickListener(new View.OnClickListener() {
@@ -242,4 +244,5 @@ public class WriteFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
     }
+
 }

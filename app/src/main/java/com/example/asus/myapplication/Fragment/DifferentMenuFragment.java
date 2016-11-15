@@ -90,8 +90,11 @@ public class DifferentMenuFragment extends Fragment {
     private  int MYSQL_CODE=0;
     private   int note_id = -1;
     private  int mposition;
-    private  boolean TOP=false;
+    //private  boolean TOP=false;
     private  Note item;
+    private  int  TOPorigin=0;
+    private  int TOPindex=5000;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -157,6 +160,7 @@ public class DifferentMenuFragment extends Fragment {
     {
         mNotelab=Notelab.getNotelab(getActivity());
         mNotesList = mNotelab.getNotes();
+
 //        if (TOP == true)
 //        {
 //            mNotesList.remove(mposition);
@@ -183,7 +187,7 @@ public class DifferentMenuFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 MYSQL_CODE=0;
-                Intent intent = WriteActivity.newIntent(getActivity(),mNotelab.getNotes().size(),MYSQL_CODE);
+                Intent intent = WriteActivity.newIntent(getActivity(),mNotelab.getNotesize()+1,MYSQL_CODE);
                 startActivity(intent);
             }
         });
@@ -244,7 +248,8 @@ public class DifferentMenuFragment extends Fragment {
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                MYSQL_CODE=1;
                Log.d("lalala",""+testlist.size());
-                note_id= testlist.get(position).getPostion();
+                note_id= position;
+               //testlist.get(position).getPostion();
 
                Log.d("lalala",""+note_id);
                Intent intent = WriteActivity.newIntent(getActivity(),note_id,MYSQL_CODE);
@@ -332,25 +337,29 @@ public class DifferentMenuFragment extends Fragment {
                     {
                         if (position==0)        //取消置顶
                         {
-                            testlist.remove(position);
-                            testlist.add(testlist.size(),item);
-                            //mAdapter.notifyDataSetChanged();
+                            int i = item.getPostion();
+                            if (i>500) {
+                                item.setPostion(TOPorigin);
+                                Notelab.getNotelab(getActivity()).updateNote(item, i);
+                            }
                         }
                         else {
+                            if (testlist.get(0).getPostion()==5000)
+                            {
+                                Note note =testlist.get(0);
 
-                            mposition= item.getPostion();
-                            TOP=true;
-//                           Note item2 = testlist.get(0);
-//                            Notelab.getNotelab(getActivity()).deleteNote(item2);
-//
-//                            Notelab.getNotelab(getActivity()).deleteNote(item);
-//                            item.setPostion(-1);
-//                            Notelab.getNotelab(getActivity()).addNote(item);
-//
-//                            mposition = item.getPostion();
-                         //  updateUI();
-                            //mAdapter.notifyDataSetChanged();
-
+                                int i = note.getPostion();
+                                //Log.d("mytest2","position   "+i);
+                                Log.d("mytest2","position   "+i+"item  "+item.getPostion());
+                                note.setPostion(TOPorigin);
+                                //Log.d("mytest2","position   "+TOPorigin);
+                                Notelab.getNotelab(getActivity()).updateNote(note,i);
+                            }
+                            int i = item.getPostion();
+                            TOPorigin= i;
+                            item.setPostion(TOPindex);
+                            Notelab.getNotelab(getActivity()).updateNote(item,i);
+                            updateUI();
 
                         }
                         updateUI();
@@ -429,8 +438,8 @@ public class DifferentMenuFragment extends Fragment {
            Note item = getItem(position);
 
 
-                holder.mTextView2.setText(testlist.get(testlist.size() - position - 1).getNote());
-                holder.mTextView.setText(testlist.get(testlist.size() - position - 1).getmDate().toString());
+                holder.mTextView2.setText(testlist.get(position).getNote());
+                holder.mTextView.setText(testlist.get(position).getmDate().toString());
 
 
             return convertView;

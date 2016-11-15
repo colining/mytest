@@ -25,12 +25,19 @@ public class Notelab {
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
+
+
+    private   int notesize=0;
+    public int getNotesize() {
+        return notesize;
+    }
     public static Notelab getNotelab(Context context) {
 //        if(sNotelab == null)
             sNotelab = new Notelab(context);
         return sNotelab;
 
     }
+
 
 //    public List<Note> getNotes() {
 //        List<Note> notes = new ArrayList<>();
@@ -50,32 +57,52 @@ public class Notelab {
 public List<Note> getNotes() {
     List<Note> notes = new ArrayList<>();
     NoteCursorWrapper cursorWrapper = queryNote(null,null);  //queryNote(null,null);
-    Note note = new Note(-1);
-    int i =0;
+
     try{
         cursorWrapper.moveToLast();
         while (!cursorWrapper.isBeforeFirst()) {
-            if (cursorWrapper.getNote().getPostion() == -1) {
-
-                i = 1;
-                note = cursorWrapper.getNote();
-
-            } else {
+//            if (cursorWrapper.getNote().getPostion() == -1) {
+//                i = 1;
+//                note = cursorWrapper.getNote();
+//            } else {
                 notes.add(cursorWrapper.getNote());
-                Log.d("mytest",cursorWrapper.getNote().getNote());
+                Log.d("mytest",cursorWrapper.getNote().getNote()+"  "+cursorWrapper.getNote().getPostion());
                 //Log.d("lalala","position"+cursorWrapper.getNote().getPostion()+"\n");
                 cursorWrapper.moveToPrevious();
-            }
+           // }
         }
-        if (i==1)
-        {
-            notes.add(note);
-        }
+
     }finally {
         cursorWrapper.close();
     }
+    notes =noteScequence(notes);
+    if (notes.size()>0 ){
+        if (notes.get(0).getPostion()<500) {
+            notesize = notes.get(0).getPostion();
+        }
+        else{
+            notesize= notes.get(1).getPostion();
+        }
+
+    }
     return notes;
 }
+    private  List<Note> noteScequence(List<Note> notes)
+    {
+        for (int i = 0 ; i<notes.size();i++)
+            for (int j = i;j<notes.size();j++)
+            {
+                if (notes.get(i).getPostion()<notes.get(j).getPostion())
+                {
+                    Note note=notes.get(i);
+                    notes.set(i,notes.get(j));
+                    notes.set(j,note);
+                }
+            }
+
+        return  notes;
+    }
+
     private  Notelab(Context context)
     {
         mContext = context.getApplicationContext();
@@ -119,11 +146,19 @@ public List<Note> getNotes() {
     public void  updateNote(Note note)
     {
 
-       ContentValues values = getContentValues(note);
+        ContentValues values = getContentValues(note);
         String where = "position=?";
         String[] whereArgs = new String[] {String.valueOf(note.getPostion())};
         mDatabase.update(NoteTable.NAME,values,where,whereArgs);
     }
+    public void  updateNote(Note note ,int i)
+    {
+        ContentValues values = getContentValues(note);
+        String where = "position=?";
+        String[] whereArgs = new String[] {String.valueOf(i)};
+        mDatabase.update(NoteTable.NAME,values,where,whereArgs);
+    }
+
 
     public void  deleteNote(Note note)
     {
@@ -131,6 +166,7 @@ public List<Note> getNotes() {
         Log.d("lalaal",position);
         ContentValues values = getContentValues(note);
         mDatabase.delete(NoteTable.NAME,NoteTable.Cols.Position +" = ?",new String[]{position});
+
     }
 
     private NoteCursorWrapper queryNote(String whereClause, String[] whereArgs)
